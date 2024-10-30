@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <limits>
+#include <cstring>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ struct livros {
     struct emprestimo emp;
 };
 
-int opcPrinc, cod, pos;
+int opcPrinc, cod, pos, opcAlteracao;
 char opcSecun;
 FILE *arq;
 struct livros liv;
@@ -108,17 +109,86 @@ int main(){
         case 3:
         arq = fopen("dados.dat", "rb+");
          if (arq != NULL){
-            
+            cout << "Digite o codigo do livro";
+            cin >> cod;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
+            pos = -1;
+            while(!feof(arq)){
+                fseek(arq, sizeof(struct livros) * pos, SEEK_SET);
+                strcpy(liv.emp.dt_emp, "");
+                strcpy(liv.emp.dt_dev, "");
+                fwrite(&liv, sizeof(struct livros), 1, arq);
+                break;
+            }
+            fclose(arq);
+            
             } else {
                 cout << "Não foi possível acessar os arquivos";
             }
             break;
         case 4:
-         if {arq != NULL}{
+        arq = fopen("dados.dat", "rb+");
+         if (arq != NULL){
+            cout << "Digite o código do livro";
+            cin >> cod;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
+            pos = -1;
+            while(!feof(arq)){
+                fread(&liv, sizeof(struct livros), 1, arq);
+                if (cod == liv.codigo){
+                    fseek(arq, sizeof(struct livros) * pos, SEEK_SET);
+                    cout << "Qual informação deseja alterar?" << endl;
+                    cout << "1 - Título" << endl;
+                    cout << "2 - Autores" << endl;
+                    cout << "3 - Área de atuação" << endl;
+                    cout << "4 - Editora" << endl;
+                    cout << "5 - Número de páginas" << endl;
+                    cout << "Escolha uma opção: ";
+                    cin >> opcAlteracao;
+
+                    switch (opcAlteracao)
+                    {
+                    case 1:
+                        cout << "Digite o novo título";
+                        cin.get(liv.titulo, 255);
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        break;
+                    case 2:
+                        cout << "Digite o(s) novo(s) autor(es):";
+                        cin.get(liv.autores, 255);
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        break;
+                    case 3:
+                        cout << "Digite a nova área de atuação:";
+                        cin.get(liv.area, 255);
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        break;
+                    case 4:
+                        cout << "Digite o nome da nova editora:";
+                        cin.get(liv.editora, 255);
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        break;
+                    case 5:
+                        cout << "Digite o número de páginas";
+                        cin >> liv.paginas;
+                        break;
+                    default:
+                        cout << "Digite uma opção válida" << endl;
+
+                        break;
+                    }
+
+                    fwrite(&liv, sizeof(struct livros), 1, arq);
+                    break;
+                }
+            }
+            fclose(arq);
             } else {
                 cout << "Não foi possível acessar os arquivos";
+                cin.ignore();
+                cin.get();
             }
             break;
         case 5:
