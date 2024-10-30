@@ -14,7 +14,7 @@ struct livros {
     struct emprestimo emp;
 };
 
-int opcPrinc;
+int opcPrinc, cod, pos;
 char opcSecun;
 FILE *arq;
 struct livros liv;
@@ -56,24 +56,91 @@ int main(){
                 cout << "Agora digite o número de páginas";
                 cin >> liv.paginas;
 
+                arq = fopen("dados.dat", "ab");
                 if (arq != NULL){
+                    arq = fopen("dados.dat", "wb");
+                }
+                if (fwrite(&liv, sizeof(struct livros), 1, arq) == 1){
+                    cout << "Livro cadastrado com sucesso";
 
                 } else {
                     cout << "Não foi possível acessar os arquivos";
                 }
+                fclose(arq);
+                cin.ignore();
+                cin.get();
             }
             break;
         case 2:
+        arq = fopen("dados.dat", "rb+");
+         if (arq != NULL){
+            cout << "Digite o código do livro para emprestimo";
+            cin >> cod;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            pos = -1;
+            while(!feof(arq)){
+                fread(&liv, sizeof(struct livros), 1, arq);
+                pos++;
+
+                if (cod == liv.codigo){
+                    cout << "Qual a data de emprestimo?";
+                    cin.get(liv.emp.dt_emp, 10);
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "Digite a data de devolução";
+                    cin.get(liv.emp.dt_dev, 10);
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "Digite o usuario";
+                    cin.get(liv.emp.usuarios, 255);
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                    fwrite(&liv, sizeof(struct livros), 1, arq);
+                    break;
+                }
+            }
+            fclose(arq);
+            } else {
+                cout << "Não foi possível acessar os arquivos";
+                cin.ignore();
+                cin.get();
+            }
             break;
         case 3:
+        arq = fopen("dados.dat", "rb+");
+         if (arq != NULL){
+            
+
+            } else {
+                cout << "Não foi possível acessar os arquivos";
+            }
             break;
         case 4:
+         if {arq != NULL}{
+
+            } else {
+                cout << "Não foi possível acessar os arquivos";
+            }
             break;
         case 5:
+         if {arq != NULL}{
+
+            } else {
+                cout << "Não foi possível acessar os arquivos";
+            }
             break;
         case 6:
+         if {arq != NULL}{
+
+            } else {
+                cout << "Não foi possível acessar os arquivos";
+            }
             break;
         case 7:
+         if {arq != NULL}{
+
+            } else {
+                cout << "Não foi possível acessar os arquivos";
+            }
             break;
         case 8:
             cout << "Código" << liv.codigo;
